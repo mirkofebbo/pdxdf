@@ -1,4 +1,4 @@
-"""Custom pyxdf-tools errors."""
+"""Custom pdxdf errors."""
 
 
 class XdfStreamLoadError(Exception):

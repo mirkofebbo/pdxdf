@@ -1,30 +1,27 @@
-# pyxdf-tools
+# pdxdf
 
 ## Install
 ### Install into an existing environment
 
 ```
-pip install -e git+https://github.com/jamieforth/pyxdf-tools.git#egg=pyxdftools
+pip install -e git+https://github.com/jamieforth/pdxdf.git#egg=pdxdf
 ```
 
-### Create a new environment from this repo using `PDM`
+### Create a new environment from this repo using `uv`
 
-PDM is a package and dependency manager, this is simplest way to set
-up a self-contained virtual environment with everything installed.
-
-First install PDM: https://pdm-project.org/.
+- [`uv`](https://docs.astral.sh/uv/)
 
 ```
-git clone https://github.com/jamieforth/pyxdf-tools.git
-cd pyxdf-tools
-pdm install
+$ git clone https://github.com/jamieforth/pdxdf.git
+$ cd pdxdf
+$ uv sync
 ```
 
 ### Updating
 
 ```
-git pull
-pdm update
+$ git pull
+$ uv sync
 ```
 
 ### Using
@@ -39,7 +36,7 @@ deactivate
 ### Inspecting streams
 
 ```
-from pyxdftools import Xdf
+from pdxdf import Xdf
 
 xdf_data_path = '<filename>.xdf'
 
