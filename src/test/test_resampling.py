@@ -338,3 +338,38 @@ def test_sine_wave_file(synchronize_clocks):
     # Time-series data
     assert np.array_equal(streams[i]["time_series"], dfs["id3_time_series"])
     np.testing.assert_allclose(streams[i]["time_stamps"], dfs["id3_time_stamps"])
+
+
+@pytest.mark.parametrize("jitter_break_threshold_seconds", [0.11, 0.09])
+@pytest.mark.skipif("resampling" not in files, reason="File not found.")
+def test_resampling_file_segments(jitter_break_threshold_seconds):
+    path = files["resampling"]
+    streams, header = load_xdf(
+        path,
+        synchronize_clocks=True,
+        jitter_break_threshold_seconds=jitter_break_threshold_seconds,
+        jitter_break_threshold_samples=0,
+    )
+
+    for stream in streams: 
+        nominal_srate = float(stream["info"]["nominal_srate"][0])
+        if nominal_srate == 0.0:
+            continue 
+        tdiff = 1 / float(stream["info"]["nominal_srate"][0])
+        if jitter_break_threshold_seconds > tdiff:
+            assert stream["info"]["segments"] == [(0, 30720)]
+            assert stream["info"]["effective_srate"] == pytest.approx(511.9999042066614)
+        else:
+            # Pathological case where every sample is a segment
+            assert stream["info"]["segments"] == [
+                (0, 0),
+                (1, 1),
+                (2, 2),
+                (3, 3),
+                (4, 4),
+                (5, 5),
+                (6, 6),
+                (7, 7),
+                (8, 8),
+            ]
+            assert stream["info"]["effective_srate"] == pytest.approx(0)
